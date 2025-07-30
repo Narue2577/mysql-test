@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useActionState, useState } from "react";
+import { saveFormDatasToDatabase } from '../registration/action'
 
 
 export default function Registration(){
@@ -39,6 +40,15 @@ export default function Registration(){
     };*/
  
 }
+const initialState = {
+  success: false,
+  message: "",
+};
+
+const [state, formAction, pending] = useActionState(
+    saveFormDatasToDatabase,
+    initialState
+  );
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
@@ -68,7 +78,7 @@ export default function Registration(){
                                   />
                       </div>
             <h2 className="mb-6 text-2xl font-semibold text-center">Registration</h2>
-                <form className="space-y-4" onSubmit={handleSubmit} >
+                <form className="space-y-4" /*onSubmit={handleSubmit}*/ action={formAction} >
                      <div>
                         <label className="block mb-2 text-sm font-medium text-gray-600">
                                             Full Name
@@ -123,9 +133,10 @@ export default function Registration(){
                         <button
                             type="submit"
                             className="w-full px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-700"
-                        >
+                         disabled={pending} >
                             Register
                         </button>
+                        <p>{state?.message}</p>
                     </div>
                     <Link href="/auth/login" className="grid text-center justify-items-center" >Click to Login</Link>
                 </form>
