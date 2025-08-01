@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <p>Welcome {session.user?.email}</p>
+      <p>Welcome {/*session.user?.email*/ session.user?.username}</p>
       <button onClick={() => signOut()}>Logout</button>
     </div>
   )
