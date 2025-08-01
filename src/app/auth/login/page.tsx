@@ -27,6 +27,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useActionState } from "react";
 import { loginUser } from './actione';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 
 export default function Login() {
   const initialState = {
@@ -35,7 +37,22 @@ export default function Login() {
   };
 
   const [state, formAction, pending] = useActionState(loginUser, initialState);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    })
+
+    if (result?.ok) {
+      window.location.href = '/dashboard'
+    }
+  }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
@@ -49,13 +66,15 @@ export default function Login() {
         </div>
         <h2 className="mb-6 text-2xl font-semibold text-center">Login</h2>
         
-        <form className="space-y-4" action={formAction}>
+        <form className="space-y-4" action={formAction} onSubmit={handleSubmit}>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-600">
               Email Address
             </label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Enter your email"
               name="email"
@@ -69,6 +88,8 @@ export default function Login() {
             </label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Enter your password"
               name="password"
