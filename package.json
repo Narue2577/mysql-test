@@ -11,6 +11,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^3.0.2",
+    "iron-session": "^8.0.4",
     "mysql2": "^3.14.2",
     "next": "15.4.3",
     "postcss": "^8.5.6",
